@@ -8,9 +8,10 @@ import br.com.alura.screenmatch.services.ApiConsumption;
 import br.com.alura.screenmatch.services.DataConverter;
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -81,18 +82,18 @@ public class Main {
 
         episodes.forEach(System.out::println);
 
-        System.out.println("Digite um trecho do titulo do episodio: ");
-        var titleSnippet = reading.nextLine();
-        Optional<Episode> searchedEpisode = episodes.stream()
-                .filter(e -> e.getTitle().toUpperCase().contains(titleSnippet.toUpperCase()))
-                .findFirst();
-
-        if (searchedEpisode.isPresent()) {
-            System.out.println("Episódio encontrado!");
-            System.out.println("Temporada: " + searchedEpisode.get().getSeason());
-        } else {
-            System.out.println("Episódio não encotrado!");
-        }
+//        System.out.println("Digite um trecho do titulo do episodio: ");
+//        var titleSnippet = reading.nextLine();
+//        Optional<Episode> searchedEpisode = episodes.stream()
+//                .filter(e -> e.getTitle().toUpperCase().contains(titleSnippet.toUpperCase()))
+//                .findFirst();
+//
+//        if (searchedEpisode.isPresent()) {
+//            System.out.println("Episódio encontrado!");
+//            System.out.println("Temporada: " + searchedEpisode.get().getSeason());
+//        } else {
+//            System.out.println("Episódio não encotrado!");
+//        }
 
 //        System.out.println("A partir de que ano você deseja ver os episódios?");
 //        var year = reading.nextInt();
@@ -108,5 +109,11 @@ public class Main {
 //                                " Episode: " + e.getTitle() +
 //                                " Data lançamento: " + e.getReleaseDate().format(formatter)
 //                ));
+
+        Map<Integer, Double> ratingsBySeason = episodes.stream()
+                .filter(e -> e.getRating() != null)
+                .collect(Collectors.groupingBy(Episode::getSeason,
+                        Collectors.averagingDouble(Episode::getRating)));
+        System.out.println(ratingsBySeason);
     }
 }
