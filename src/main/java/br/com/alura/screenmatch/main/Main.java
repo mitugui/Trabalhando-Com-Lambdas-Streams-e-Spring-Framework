@@ -9,6 +9,7 @@ import br.com.alura.screenmatch.services.DataConverter;
 import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.ArrayList;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -115,5 +116,13 @@ public class Main {
                 .collect(Collectors.groupingBy(Episode::getSeason,
                         Collectors.averagingDouble(Episode::getRating)));
         System.out.println(ratingsBySeason);
+
+        DoubleSummaryStatistics stats = episodes.stream()
+                .filter(e -> e.getRating() != null)
+                .collect(Collectors.summarizingDouble(Episode::getRating));
+        System.out.println("Média: " + stats.getAverage());
+        System.out.println("Melhor episódio: " + stats.getMax());
+        System.out.println("Pior episódio: " + stats.getMin());
+        System.out.println("Quantidade: " + stats.getCount());
     }
 }
